@@ -1,0 +1,348 @@
+DBD381
+Distributed Database System
+*a collection of multiple, logically interrelated databases distributed over a computer network
+*an environment where data is distributed amoung several sites
+*DBMS(Distributed Database Management System) the software system that permits the management of the distributed database and makes the distribution transparent to the users
+
+Major characteristics of DDBS
+-data management at multiple sites
+	DDBS data is stored and managed on multiple geographical sites where tables are 	created, data entered by different users and multiple applicatons running
+-local requirements
+	all sites that store data in DDBS is called local site. every sites main concerns 	are the requirements and data management for the users directly associated with 	that site, called a local user
+-global perspective
+	apart from catering to local requirements, the DDBS also fulfils the global 	requiremnts in a transparent way
+
+Access to a DDBS
+-local access
+	the access by the user connected to the site and accessing the data from the same 	site
+-remote access
+	user connected to a site, for example the user is connected to site 1, and accesses 	data from site 2
+-global access
+	it does not matter where the access is made, the data will be displayed after being 	collected from all locations
+
+Application of DDB
+candidate applications for a DDBS have two main characteristics 
+	1. large number of users
+	2. users spread out across a large geographicat area
+DDBS candidates
+-banking applications
+-air ticketing
+-businesses at multiple locations 
+
+Data Delivery Alturnatives
+-delivery modes
+	1. pull-only: a client request initiates the transfer of data from servers to 	clients
+	2. push-only: the absence of any specific request from clients, a server push 	initiates the transfer of data from server to clients
+	3. hybrid- combines client-pull and server-push mechanisms, the transfer of 	information from servers to clients is first initiated by a client pull(by posing a 	query) and the subsiquent transfer of updated information to clients is initiated 	by a server push
+-frequency
+	1. periodic: data is sent from the server to clients at regular intervals defined 	by system default or by clients using their profiles. both pull and push can be in 	periodic fashion
+	periodic delivery is carried out on a regular and pre-specified repeating schedule
+	2. conditional: data is sent from servers whenever certain conditions installed by 	clients in their profiles are satisfied. can be as simple as a given time span as 	complicated as event-action rules is mostly used in the hybrid or push-only 	delivery system 
+	3. ad-hoc or irregular: performed mostly in a pure pull-based system. data is 	pulledfrom servers to clients in an ad-hoc fashion whenever clients request
+-communication methods
+*determine the various ways in which servers and clients communicate for delivering information to clients
+	1. unicast: the communication from a server in one-to-one, the server send data to 	one client using a particular delivery mode with some frequency
+	2. one-to-many: the server send data to several clients. may use a multicast or 	broadcast protocol
+
+Resembling setups
+-centralized C/S system
+	data management is carried on a single centralized system
+	data accessed from different machine(clients)
+	all machines connected with eachother through communication link(network)
+	data storage and management is mainly done on the server
+	the data is associated with a single site(server)
+	rest of the machines are accessing data from the server
+
+Reasons for DDBS
+-local units want control over data
+-reduce telecom cost
+
+Addvantages of DDBS
+-transparent management of distributed and replicated data
+	the separation of higer-level semantics of a system from lower-level implementation 	issues, transparent systems 'hide' implementation details from users
+	..data independance: the immunity of a users applications to changes in the 	definition and organisation of data, and vive versa
+		data definition occurs at two levels
+		1. logical structure(schema definition) of the data: the immunity of user 		applications to changes in the logical structure
+		2. physical structure(physical data description): deals with hiding the 		details of the structure from the user applications
+//when a user application is written, it should not be concerned with the details of physical data organization. the user application should not need to be modified when data organisation changes occur due to performance considerations//
+	..network transparency/ distributed transparency:user should be protected from the 	operational details of the network; possibly even hiding the existance of the 	network. the user is unaware of even the existance of the network, that frees them 	from the problems and complexities of network
+		.distribution transparency: requires users do not have to specify where 		data is located(location transparancy). the command used to perform a task 		is independent of both the location of data and the system on which an 			operation is carried out
+		.naming transparency: a unique name is provided for each object in the db
+	..replication transparency: the replication is hidden from the end user by the 	DDBS, with the advantage that the user gets the benefits of the system and does not 	need to know the details or undersatnd the technical details
+	..fragmentation transparency: the division of each database relation into smaller 	fragments and treat each of the fragments as a separate database object for 	reaasons of performance, availability, reliability. each replica is not the full 	relation but only a subset of it; thus, less space is required, and fewer data 	items need be managed
+		the types of fragmentationalturnatives
+		.horizontal fragmentation: relation is partitioned into a set of sub-			relations each of which have a subset of the tuples(rows) of the original 		relation
+		.vertical fragmentation: each sub-relation is defined on a subset of the 		attributes(columns) of the original relation
+responsibility of transparancy
+*it hides all the technical details from the users, and make the use/acces very easy
+	three major layers of transparancy
+	1. language/ compiler
+	2. operating system
+	3. DDBMS
+transperancy provider
+	1. access layer: the responsibility of providing transparent access to data 	resources transparency features can be built into the user language, which then 	translates the requested services into required operations
+	2. operating system level: provide some level of transparency to system users. this 	layer is not visible to the end-users most of the time, since it resides below the 	DDBMS or the language used to develop the application. both DDBMS and the language 	heavily depend on the features supported by the operating system
+	3. DBMS level: it is the responsibility of the DBMS to make all necessary 	translations from the operating system to the higher-level user interface
+layers of transparency 
+data>>data independence>>network transperancy>>replication transperancy>>language transperancy>>fragmentation transperancy>>language transparency
+-reliable access to data through distributed transactions
+	DDBS environment reduces the chance of a single point of failure and that increases reliability of the entire system
+	the failure of a single site or the failure of a communication link which makes one or more sites unreachable, is not sufficient to bring down the entire system
+	in the case of a DDB this means that some of the data mabe be unreachable but with proper care users may be permitted to access other parts of the DDB
+	the 'proper care' comes in the form of support for distributed transactions and application protocols
+	concurrency issues: the concurrent access menas the access of data by multiple users at the same time however, these issues become more critical in case of a DDBS; consistancy of data across multiple sites is a serious issue especially when the same data is duplicated at multiple site 
+	distributed transactions should be able to be executed at several sitesat which they access the local database without fear of failure 
+-improved performance
+the DDBS provides improved performance through
+	1. data localization: data is stored in close proxil=mity to its points of use
+		..since each site handles only a portion of the database, contention for CPU and I/O services is not as severe as for centralized databases
+		..localization reduces remote access delays that are usually involved in wide area networks 
+	2. querry parallelism: a query in certain situations can be executed in parallel, 	that improves performance
+		..inter-query: multiple queries executed at the same time
+		..intra-query: query is split accross multiple sites and this split components are executed in parallel 
+-easier system expansion
+	in a distributed environment, it is much easier to accommodate increasing database sizes.
+	expansion can usually be handled by adding processing and storage power to the network
+	for many applications, it is more economical to put together a distributed computer system (whether composed of mainframes or workstations) with sufficient power than it is to establish a single, centralized system to run these tasks.
+
+-reduce the risk of telecom failures
+
+complications introduced by distribution
+	selection of the Copy: regarding replication, the distributed database system is responsible for choosing the right copy based on several constraint variables (site availability, distance load, etc.)
+	failure recovery: in the instance replication the synchronization of copies after failure must be dealt with carefully. It is considerably harder than for a centralized system. if some sites fail (e.g., by either hardware or software malfunction), or if some communication links fail while an update is being executed, the system must make sure that the effects will be reflected on the data residing at the failing or unreachable sites as soon as the system can recover from the failure. the synchronization of transactions on multiple sites is considerably tougher than for a centralized system.
+	complexity: the overall system is more complex compared to a centralized database system, since the data is stored at multiple sites and must be managed.
+	cost: a DDBS involves more cost, as the hardware and the trained manpower must be deployed at multiple sites.
+	distribution of control: the access to the data should be allowed carefully. Rights to access data should be well defined for local sites.
+
+Potential problems with distributed DBMSs
+-design issues
+	Distributed Database Design: how the database and the applications that run against it should be placed across the sites.
+	Distributed Directory Management: global to the entire DDBS or local to each site
+	Distributed Query Processing: how to decide on a strategy for executing each query over the network in the most cost-effective way
+	Distributed Concurrency Control: how to maintain the consistency of multiple copies of the database
+	Distributed Deadlock Management: alternatives of prevention, avoidance, and detection/recovery deadlocks
+	Reliability of Distributed DBMS: how to ensure the consistency of the database as well as to detect failures and recover from them
+	Replication: should the distributed database be  (partially or fully) replicated
+	Relationship among Problems: relationship among the components
+	Additional Issues: Since the  environment has changed significantly are there other issues
+The question that is being addressed is how the database and the applications that run against it should be placed across the sites
+Two basic alternatives:
+1. Partitioned (or non-replicated) : database is divided into a number of disjoint partitions each of which is placed at a different site.
+2. Replicated. Database can be either fully replicated (also called fully duplicated) where the entire database is stored at each site, or partially replicated (or partially duplicated) where each partition of the database is stored at more than one site, but not at all the sites.
+Two fundamental design issues are 
+1. fragmentation, the separation of the database into partitions called fragments, 
+2. distribution, the optimum distribution of fragments.
+
+-query processing
+-complezety of building distributed applications
+-increased cost of replicating resources
+-managing distribution
+
+-the devolution of control to many centres and the difficulty of reaching agreements
+-security
+
+**replication
+It is necessary to implement protocols that ensure the consistency of the replicas i.e., copies of the same data item have the same value.
+Protocols can be:
+Eager in that they force the updates to be applied to all the replicas before the transaction completes, or
+Lazy in that the transaction updates one copy (called the master) from which updates are propagated to the others after the transaction completes
+
+DDBMS
+The architecture of a system defines its structure.
+Generic architecture of a centralized DBMSs
+Three “reference” architectures for a distributed DBMS exist:
+1. client/server systems, 
+2. peer-to-peer distributed DBMS
+3. multidata base systems
+Data logical DBMS architecture Focuses on the different user classes and roles and their varying views on data
+
+Generic centralized DBMS architecture
+The functions performed by a DBMS can be layered
+-interface layer manages the interface to the applications.
+-control layer controls the query by adding semantic integrity predicates and authorization predicates.
+-query processing (or compilation) layer maps the query into an optimized sequence of lower-level operations. This layer is concerned with performance
+-execution layer directs the execution of the access plans, including transaction management (commit, restart) and synchronization of algebra operations
+-data access layer manages the data structures that implement the files, indices, etc.
+-consistency layer manages concurrency control and logging for update requests
+
+Archetectural models for DDBMS
+The DDBMS architecture can be discussed from three different dimensions.
+1. Autonomy: Degree to which member databases can operate independently
+2. Distribution: Data is distributed physically on multiple sites/machines.
+3. Heterogeneity: Simply means variation / difference.
+
+Dimensions may exist at different levels in different architectures as given below:
+1. Autonomy (0,1,2) 
+	0-Tight hydrogenation 
+	1-semi autonomous 
+	2-total isolation
+2. Distribution (0,1,2) 
+	0No distribution
+	1 client/server
+	2 Peer to Peer
+3. Heterogeneity (0,1)
+	0homogeneous
+	1-->Heterogeneous
+
+**A1(semi autonomous) D2 (Peer to Peer) H1 (Heterogeneity)
+
+Client server systems
+The general idea distinguishes the functionality that needs to be provided and divide these functions into two classes: server functions and client functions.
+Provides a two-level architecture which makes it easier to manage the complexity of modern DBMSs and the complexity of distribution.
+The functionality allocation between clients and serves differ in different types of distributed DBMSs
+	..In relational systems, the server does most of the data management work where 	query processing and optimization, transaction management and storage management is 	done at the server.
+The client, provides the application and user interface, and has a DBMS client module that is responsible for managing the data that is cached to the client and (sometimes) managing the transaction locks that may have been cached.
+Consistency checking of user queries may also be done  at the client side, though not common since it requires the replication of the system catalogue at the client machines
+Operating system and communication software runs on both the client and the server
+
+Types of client/ server architecture
+Multiple client/single server: one server accessed by multiple clients
+Multiple client/multiple server: Two alternative management strategies are possible
+	1. Each client manages its own connection to the appropriate server 
+       --system loads the client machines with additional responsibilities. (“heavy 	client”)
+	2. Each client knows of only its “home server” which then communicates with other 	servers as required. --concentrates the data management functionality at the 	servers(“light clients.”)
+
+Peer-to-peer systems
+-In peer-to-peer architectures there are no differentiations between the functionality of each site in the system4.
+-The physical data organization on each machine may be, and probably is, different.
+-There needs to be an individual internal schema definition at each site, which we call the local internal schema (LIS).
+-The enterprise view of the data is described by the global conceptual schema (GCS),
+-To handle data fragmentation and replication, the logical organization of data at each site needs to be described.
+-There needs to be a third layer in the architecture, the local conceptual schema (LCS).
+-User applications and user access to the database is supported by external schemas (ESs), defined as being above the global conceptual schema.
+-Location and replication transparencies are supported by the definition of the local and global conceptual schemas and the mapping in between them
+-Network transparency, is supported by the definition of the global conceptual schema
+
+Elements: Of  User Processor(AP):
+1. User interface handler is responsible for interpreting user commands as they come in, and formatting the result data as it is sent to the user.
+2. Semantic data controller uses the integrity constraints and authorizations that are defined as part of the global conceptual schema to check if the user query can be processed.
+3. Global query optimizer and decomposer determines an execution strategy to minimize a cost function and translates the global queries into local ones using the global and local conceptual schemas as well as the global directory. 
+4. Global query optimizer generates the best strategy to execute distributed join operations.
+5. Distributed execution monitor/ distributed transaction manager coordinates the distributed execution of the user request.
+
+Elements: Of  Data Processor(DP):
+1. The local query optimizer, acts as the access path selector, responsible for choosing the best access path5 to access any data item
+2. The local recovery manager is responsible for making sure that the local database remains consistent even when failures occur
+3. The run-time support processor physically accesses the database according to the physical commands in the schedule generated by the query optimizer.
+	The run-time support processor is the interface to the operating system and 	contains the database buffer (or cache) manager, which is responsible for 	maintaining the main memory buffers and managing the data accesses.
+
+Multidata base system architecture
+-Multidata base systems (MDBS) represent the case where individual DBMSs are fully autonomous and have no concept of cooperation; they may not even “know” of each other’s existence or how to talk to each other
+-The differences in the level of autonomy between the distributed multi-DBMSs and distributed DBMSs are reflected in their architecture models.
+-The fundamental difference relates to the definition of global conceptual schema
+-In case of distributed multi-DBMSs; the global conceptual schema represents only the collection of some of the local databases that each local DBMS wants to share.
+
+
+Data and Access Control
+A DBMS has the ability to support semantic data control (data and access control using high-level semantics)
+-Semantic data control  includes 
+	..view management
+		.The relational model provides full logical data independence. 
+		.This is an advantage because external schemas enable user groups to have 		their own view of the database.
+ 		.A view is a virtual relation, defined as the result of a query on base 		relations
+		.**A view is a dynamic window in the sense that it reflects all updates to 		the database
+		.views hide some data and therefore secure.
+		.In a distributed DBMS, a view can be derived from distributed relations, 		and the access to a view requires the execution of the distributed query 		corresponding to the view definition
+		.views in centralized DBMSS
+			A view is a relation derived from base relations, as a result of 			the relational query
+			This relation is defined by associating the name of the view with 			the retrieval query that specifies it.
+			Eg view of system analysts (SYSAN) derived from relation EMP
+			(ENO,ENAME,TITLE)
+				CREATE VIEW SYSAN(ENO, ENAME)
+				AS SELECT ENO, ENAME
+				FROM EMP
+				WHERE TITLE = "Syst. Analyst.“
+			The effect of this statement is the storage of the view definition 			in the catalog and no other information needs to be recorded.
+			The result of the query defining the view is not produced. 
+			The view can be manipulated as a base relation.
+		.Views can be defined using complex relational queries involving 			selection,projection, join and aggregate functions
+		.All views can be interrogated as base relations, but not all views can be 		manipulated as such ( eg updates)
+		.Updates through views can be handled automatically only if they can be 			propagated correctly to the base relations.
+		.In a Centralized relational database we classify views as being updatable 		and not updatable
+		.A view is updatable only if: 
+			1. the updates to the view can be propagated to the base relations 			without ambiguity. 
+			2. they are derived from a single relation by selection and 				projection.
+			3. Views derived by join are updatable if they include the keys of 			the base relations.
+		.views in distributed DBMSs
+			The definition of a view is similar in a distributed DBMS and in 			centralized systems
+			A view in a distributed system may be derived from fragmented 				relations stored at different sites.
+			When a view is defined, its name and its retrieval query are stored 			in the catalog.
+			View definition should be stored in the directory(catalog) in the 			same way as the base relation descriptions
+			View definitions can be centralized at one site, partially 				duplicated, or fully duplicated.
+			The information associating a view name to its definition site 				should be duplicated.
+			If the view definition is not present at the site where the query 			is issued, remote access to the view definition site is necessary
+			The qualification defining the view is found in the distributed 			database catalog and then merged with the query to provide a query 			on base relations. 
+			The query processor maps the distributed query into a query on 				physical fragments.
+			Evaluating views derived from distributed relations may be 				costly.( many users may access the same view which must be 				recomputed for each user.)
+			An alternative solution is to avoid view derivation is by 				maintaining actual versions of the views, called materialized 				views.
+			1. materialised view:stores the tuples of a view in a database 				relation, like the other database tuples, possibly with indices
+				Access to a materialized view is much faster than deriving 				the view, in particular, in a distributed DBMS where base 				relations can be remote.
+				Materialized views come in handy in the context of data 				warehousing to speed up On Line Analytical Processing 					(OLAP) applications because they provide and store compact 				database summaries.(Involving aggregate and grouping 					operators (sum,count and group by)
+			view over relation PROJ(PNO,PNAME,BUDGET,LOC) gives, for each 				location, the number of projects and the total budget.
+				CREATE VIEW PL(LOC, NBPROJ, TBUDGET)
+				AS SELECT LOC, COUNT(*),SUM(BUDGET)
+				FROM PROJ
+				GROUP BY LOC
+
+	..security control
+		Data security is an important function of a database system that protects 		data against unauthorized access
+		Data security includes two aspects: data protection and access control.
+		Data protection is required to prevent unauthorized users from 				understanding the physical content of data 
+		Approaches to Data protection 
+		Data encryption: Encrypted data can be decrypted only by authorized users 		who “know” the code.
+			Two main schemes
+				Data Encryption Standard 
+				public-key encryption
+		Access control must guarantee that only authorized users perform operations 		they are allowed to perform on the database.Access control in database 			systems differs in several aspects from that in traditional file systems
+		Authorizations must be refined so that different users have different 			rights on the same database objects  implies ability to specify subsets 		of objects more precisely than by name and to distinguish between groups of 		users.
+		decentralized control of authorizations is of particular importance in a 		distributed context. 
+		In relational systems, authorizations can be uniformly controlled by 			database administrators using high-level constructs
+
+	..semantic integrity control
+		Discretionary (or authorization control) : defines access rights based on 		the users, the type of access (e.g., SELECT, UPDATE) and the objects to be 		accessed.
+			Three main actors are involved in discretionary access control:
+				Subject (e.g., users, groups of users) who trigger the 					execution of application programs; 
+			The operations, which are embedded in application programs; 
+			The database objects, on which the operations are performed
+		Authorization control consists of checking whether a given triple (subject, 		operation, object) can be allowed to proceed
+		To control authorizations properly, the DBMS requires the definition of 		subjects,objects, and access rights
+		The introduction of a subject in the system is done by a pair (user name, 		password).
+		A user name uniquely identifies the users of that name in the system, while 		the password, authenticates the users.
+		User name and password prevents people who do not know the password from 		entering the system with only the user name.
+
+		Mandatory (or multilevel): further increases security by restricting access 		to classified data to cleared users (quite resent as a result of threats 		from the internet)
+		While both can be implemented on centralized DB, Distributed DBs  bring in 		additional complexity which stems from the fact that objects and users can 		be distributed.
+		The objects to protect are subsets of the database. 
+		A right expresses a relationship between a subject and an object for a 			particular set of operations. 
+		In an SQL-based relational DBMS, an operation is a high-level statement 		such as SELECT, INSERT, UPDATE, or DELETE, 
+		Rights are defined (granted or revoked) using such statements:
+			As
+			GRANT (operation type(s) ON (object) TO (subject(s))
+			REVOKE (operation type(s)) ON (object) FROM (subject(s))
+		The keyword public  for subject can be used to mean all users.
+		Authorization control can be characterized based on who (the grantors) can 		grant the rights. 
+			Centralized: where  a single user or user class, (DBAs), has all 			privileges on the database objects and is the only one allowed to 			use the GRANT and REVOKE statements
+			Decentralized: allows the owner to grant access to his/her objects 
+			The GRANT, may also be  transferred by the grantor to the grantee 			all the rights of the grantor performing the statement to the 				specified subjects
+			Privileges of the subjects over objects are recorded in the catalog 			(directory) as authorization rules in the form of an authorization 			matrix, in which a row defines a subject, a column an object, and a 			matrix entry, the authorized operations.
+-These functions ensure authorized users perform correct operations on the database, making sure database integrity is maintained.
+	The authorization matrix can be stored in three ways:
+		..by row each subject is associated with the list of objects that may be 		accessed together with the related access rights and  all the rights of the 		logged-on user are together (in the user profile)
+		..by column : each object is associated with the list of subjects who may 		access it with the corresponding access rights
+		..by element: This is a combined approach in which the matrix is stored by 		element, that is, by relation (subject, object,right).
+	Discretionary access control has some limitations. 
+	One problem is that a malicious user can access unauthorized data through an 	authorized user
+	Multilevel access control answers this problem and further improves security by 	defining different security levels for both subjects and data objects
+	This approach is based on Bell and Lapaduda model designed for operating system 	security
+	In this model,subjects are processes acting on a user’s behalf; a process has a 	security level also called clearance derived from that of the user.
+	The security levels are Top Secret (TS), Secret (S), Confidential (C) and 	Unclassified (U), and ordered as TS > S >C >U, where “>” means “more secure
+Multilevel access control
+	Access in read and write modes by subjects is restricted by two rules:
+		A subject S is allowed to read an object of security level l only if 			level(S) >= l.
+		A subject S is allowed to write an object of security level l only if 			class(S) <= l.
+	Rule 1 (called “no read up”) protects data from unauthorized disclosure, i.e., a subject at a given security level can only read objects at the same or lower security levels.
+Rule 2 (called “no write down”) protects data from unauthorized change, i.e., a subject at a given security level can only write objects at the same or higher security levels.
+
+-Violation of some rules by a user program implies the rejection of the effects of that program or propagating some effects to preserve the database integrity.
+-Cost of enforcing semantic data control, is high in terms of resource utilization in a centralized DBMS, 
+-In the Ddbase this can be prohibitive since these must be stored in a catalog (distributed directory) which in itself is a distributed database and managing this can be a Challenge.
